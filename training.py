@@ -12,10 +12,8 @@ from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc
 
 # Task Configs
 TASK_CONFIGS = {
-    '''
+
 # 1.) Emotion & Sentiment Analysis Task
-'''
-        
 
 
     "emotion_geoemotions": {
@@ -57,9 +55,8 @@ TASK_CONFIGS = {
         "trainable": False,
     },
 
-    '''
+
 # 2.) Intent & Topic Classifiers 
-'''
 
 
     # Zero-shot intent using NLI model w/no fine-tuning
@@ -90,18 +87,49 @@ TASK_CONFIGS = {
         "trainable": True,  
     },
 
+
 # 3.) Empathy & Dialogue Classifier
+
+
     "empathy_strategy": {
-        "model_name": "roberta-base"
+        "model_name": "roberta-base",
+        "num_labels": 8,       # reflection, question, validation, reassurance, sympathy, information, advice, etc.
+        "problem_type": "multilabel",
+        "dataset": "empathy_strategies",
+        "metric": "f1-micro",
+        "trainable": True,
     },
-        
 
 
-    #
-        # 4.) Risk & Safety Classifiers
-    #
+# 4.) Risk & Safety Classifiers
 
-    #
-        # 5.) Context & Temporal Memory
+    "risk_crisis": {
+        "model_name": "microsoft/deberta-v3-large",
+        "num_labels": 2,                # crisis or no crisis
+        "problem_type": "binary",
+        "dataset": "clpsych_or_similar",
+        "metric": "auroc",
+        "trainable": True,
+    },
+
+    "blame_attribution": {
+        "model_name": "roberta-base",
+        "num_labels": 3,                    # self-blame, blaming others, or no blame
+        "problem_type": "multiclass",
+        "dataset": "blame_connotation_frames",
+        "metric": "f1-macro",
+        "trainable": True,
+    },
+
+    "safety_guardrails": {
+        "model_name" : "keyword_regex_rules",
+        "num_labels": None,
+        "problem_type": "rule_based",
+        "dataset": "handcrafted",
+        "metric": None,
+        "trainable": False,
+    },
+
+# 5.) Context & Temporal Memory
     #
 }
