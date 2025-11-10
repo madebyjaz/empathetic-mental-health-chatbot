@@ -1,0 +1,20 @@
+# Core Framework
+streamlit
+
+# NLP and Transformers
+transformers
+torch
+sentencepiece
+datasets
+huggingface_hub
+
+# Data Science & Processing
+pandas
+numpy
+scikit-learn
+seaborn
+plotly
+
+# Utilities
+argparse
+typing
