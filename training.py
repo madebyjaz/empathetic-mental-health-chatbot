@@ -69,9 +69,10 @@ TASK_CONFIGS = {
         "trainable": False,
     },
 
+    # fine tuned intent classifier
     "topic_mental_health": {
         "model_name": "roberta-base", 
-        "num_labels": 8,       # anxiety, depression, stress, trauma, substance use, eating disorders, bipolar disorder, schizophrenia
+        "num_labels": 8,                # anxiety, depression, stress, trauma, substance use, eating disorders, bipolar disorder, schizophrenia
         "problem_type": "multilabel",
         "dataset": "mental_health_topics",
         "metric": "f1-micro",
@@ -93,7 +94,7 @@ TASK_CONFIGS = {
 
     "empathy_strategy": {
         "model_name": "roberta-base",
-        "num_labels": 8,       # reflection, question, validation, reassurance, sympathy, information, advice, etc.
+        "num_labels": 8,                # reflection, question, validation, reassurance, sympathy, information, advice, etc.
         "problem_type": "multilabel",
         "dataset": "empathy_strategies",
         "metric": "f1-micro",
@@ -105,31 +106,61 @@ TASK_CONFIGS = {
 
     "risk_crisis": {
         "model_name": "microsoft/deberta-v3-large",
-        "num_labels": 2,                # crisis or no crisis
+        "num_labels": 2,                # crisis /self harm or no crisis
         "problem_type": "binary",
         "dataset": "clpsych_or_similar",
         "metric": "auroc",
         "trainable": True,
     },
 
+    # blame / praising attribution classifier
     "blame_attribution": {
         "model_name": "roberta-base",
-        "num_labels": 3,                    # self-blame, blaming others, or no blame
+        "num_labels": 3,                    # blame, praising , or no blame
         "problem_type": "multiclass",
         "dataset": "blame_connotation_frames",
         "metric": "f1-macro",
         "trainable": True,
     },
 
+    # safety guardrails using rule-based + neural keywords 
     "safety_guardrails": {
         "model_name" : "keyword_regex_rules",
         "num_labels": None,
         "problem_type": "rule_based",
         "dataset": "handcrafted",
         "metric": None,
-        "trainable": False,
+        "trainable": False,              
+    },
+
+    # the neural crisis dector will be the risk classifier (risk_crisis)
+    "safety_guardrails_neural": {
+        "model_name" : "microsoft/deberta-v3-large",
+        "num_labels": 2,                #safety risk or no risk
+        "problem_type": "binary",
+        "dataset": "clpsych_or_similar",
+        "metric": "auroc",
+        "trainable": False,             # trained by the first classifier (risk_crisis)
     },
 
 # 5.) Context & Temporal Memory
-    #
+    "context" : {                   #  (may not train in this file)
+        "model_name": "allenai/longformer-base-4096",
+        "num_labels": None, 
+        "problem_type": "encoder_only",
+        "dataset": None,
+        "metric": None,
+        "trainable": False,
+    },
+
+    "trend_deterioration_analysis": { # 1D-CNN over time to detect deterioration trends in emotion scores (no text classification)
+        "model_name": "1d_cnn_timeseries",
+        "num_labels": 2,                #stable or deteriorating
+        "problem_type": "binary",
+        "dataset": "emotion_timeseries", 
+        "metric": "f1-macro", 
+        "trainable": True,          # this will require a different approach (another training loop)
+    },
+
+
 }
