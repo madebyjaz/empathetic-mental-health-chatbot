@@ -19,10 +19,16 @@ def parse_args():
         choices=list(TASK_CONFIGS.keys()),
         help="The task to train: emotion_geoemotions, sarcasm_detection, topic_mental_health, topic_mentalhealth, empathy_strategy, risk_crisis, blame_attribution, safety_guardrails, safety_guardrails_neural, trend_deterioration_analysis",
     )
-    parser.add_arguement(
-        "train_file",
+    parser.add_argument(
+        "--train_file",
         type=str,
         help="Path to the training data file (CSV or JSON format)",
+        required=False,
+    )
+    parser.add_argument(
+        "--val_file",
+        type=str,
+        help="Path to the validation data file (CSV or JSON format)",
         required=False,
     )
     parser.add_argument(
@@ -34,7 +40,7 @@ def parse_args():
     parser.add_argument(
         "--batch_size", 
         type=int,
-        default=8,              # could be adjusted (possibly 16) based on itiger's GPU memory
+        default=8,              # could be adjusted (e.g., 16) based on available GPU memory
     )
     parser.add_argument(
         "--epochs",
@@ -222,7 +228,7 @@ def computing_metrics(eval_pred):
 def main():
     args = parse_args()
     if args.task not in TASK_CONFIGS:
-        raise ValueError(f"Task {args.task} not is not recognized within the dictionary of Task Configs. Here are the available tasks: {list(TASK_CONFIGS.keys())}")
+        raise ValueError(f"Task {args.task} is not recognized within the dictionary of Task Configs. Here are the available tasks: {list(TASK_CONFIGS.keys())}")
     
     task_in_config = TASK_CONFIGS[args.task]
     if not task_in_config["trainable"]:
